@@ -11,22 +11,20 @@ import java.util.List;
 import com.cipherz.lil.learningspring.business.service.ReservationService;
 import com.cipherz.lil.learningspring.business.domain.RoomReservation;
 
-@Controller
-@RequestMapping("/reservations")
-public class RoomReservationWebController {
+@RestController
+@RequestMapping("/api/reservation")
+public class RoomReservationWebServiceController {
 	
 	private final ReservationService reservationService;
 	
 	@Autowired
-	public RoomReservationWebController(ReservationService reservationService) {
+	public RoomReservationWebServiceController(ReservationService reservationService) {
 		this.reservationService = reservationService;
 	}
 	
 	@GetMapping
-	public String getReservations(@RequestParam(value="date", required=false) String dateString, Model model) {
+	public List<RoomReservation> getReservations(@RequestParam(value="date", required=false) String dateString) {
 		Date date = DateUtil.createDateFromDateString(dateString);
-		List<RoomReservation> roomReservations = reservationService.getRoomReservationsForDate(date);
-		model.addAttribute("roomReservations", roomReservations);
-		return "reservations";
+		return this.reservationService.getRoomReservationsForDate(date);
 	}
-} 
+}
